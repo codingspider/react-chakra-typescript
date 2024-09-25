@@ -36,8 +36,8 @@ import { useLocation } from "react-router-dom";
 import { FiHome, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import {
   ArrowForwardIcon,
-  DragHandleIcon,
   Search2Icon,
+  CalendarIcon,
 } from "@chakra-ui/icons";
 
 import { Outlet } from "react-router-dom";
@@ -100,13 +100,34 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           <h2>
             <AccordionButton>
               <Box as="span" flex="1" textAlign="left">
-                <Icon as={DragHandleIcon} mr={2} />
+                <Icon as={CalendarIcon} mr={2} />
                 Product Management
               </Box>
               <AccordionIcon />
             </AccordionButton>
           </h2>
           <AccordionPanel pb={4}>
+            <ChakraLink
+              bg={
+                location.pathname.includes("/admin/categories") ? "teal.400" : ""
+              }
+              color={
+                location.pathname.includes("/admin/categories") ? "white" : ""
+              }
+              p={2}
+              as={ReactRouterLink}
+              to="/admin/categories"
+              display="flex"
+              alignItems="center"
+              _hover={{
+                bg: "teal.400",
+                color: "white",
+              }}
+            >
+              <Icon as={ArrowForwardIcon} mr={2} />
+              <span>Categories</span>
+            </ChakraLink>
+
             <ChakraLink
               bg={
                 location.pathname.includes("/admin/products") ? "teal.400" : ""
@@ -127,6 +148,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
               <Icon as={ArrowForwardIcon} mr={2} />
               <span>Products</span>
             </ChakraLink>
+
             <ChakraLink
               p={2}
               as={ReactRouterLink}

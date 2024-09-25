@@ -6,12 +6,14 @@ import DashboardComponent from "./components/pages/DashboardComponent";
 import ProductComponent from "./components/products/ProductComponent";
 import LoginComponent from "./components/pages/LoginComponent";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CategoriesComponent from "./components/category/CategoriesComponent";
 
 export const ROOT = "/";
 export const PREFIX = "/admin";
+export const LOGIN = "/login";
 export const DASHBOARD = "/admin/dashboard";
 export const PRODUCTs = "/admin/products";
-export const LOGIN = "/login";
+export const CATEGORIES = "/admin/categories";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: PRODUCTs,
         element: <ProductComponent></ProductComponent>,
+      },
+      {
+        path: CATEGORIES,
+        element: <CategoriesComponent></CategoriesComponent>,
       },
     ],
   },
