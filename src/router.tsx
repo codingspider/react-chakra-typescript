@@ -7,6 +7,7 @@ import ProductComponent from "./components/products/ProductComponent";
 import LoginComponent from "./components/pages/LoginComponent";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CategoriesComponent from "./components/category/CategoriesComponent";
+import SaleComponent from "./components/sales/SaleComponent";
 
 export const ROOT = "/";
 export const PREFIX = "/admin";
@@ -14,6 +15,7 @@ export const LOGIN = "/login";
 export const DASHBOARD = "/admin/dashboard";
 export const PRODUCTs = "/admin/products";
 export const CATEGORIES = "/admin/categories";
+export const POSSALE = "/admin/make/sale";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: CATEGORIES,
         element: <CategoriesComponent></CategoriesComponent>,
+      },
+      {
+        path: POSSALE,
+        element: <SaleComponent></SaleComponent>,
       },
     ],
   },

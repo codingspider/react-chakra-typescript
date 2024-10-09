@@ -42,6 +42,7 @@ import {
 
 import { Outlet } from "react-router-dom";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { POSSALE } from "../../router";
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -229,6 +230,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>
+        <Button colorScheme="teal" size="xs">
+          <ChakraLink as={ReactRouterLink} to={POSSALE}>
+            POS
+          </ChakraLink>
+        </Button>
         <IconButton
           size="lg"
           variant="ghost"
@@ -275,6 +281,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Sign out</MenuItem>
             </MenuList>
           </Menu>
+
           <Button onClick={toggleColorMode} ml="10px">
             {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
           </Button>

@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/react";
+import { Button, Image } from "@chakra-ui/react";
 import usePagination from "../../hooks/usePagination";
 import { Card, CardBody, Skeleton } from "@chakra-ui/react";
 import {
@@ -13,13 +13,13 @@ import {
 
 const CategoriesComponent = () => {
   const {
-    data: categories,
+    data: products,
     currentPage,
     lastPage,
     loading,
     goToNextPage,
     goToPreviousPage,
-  } = usePagination("/categories");
+  } = usePagination("/products");
 
   return (
     <>
@@ -30,13 +30,30 @@ const CategoriesComponent = () => {
               <Thead>
                 <Tr>
                   <Th>Sl No</Th>
-                  <Th>Category Name</Th>
+                  <Th>Thumbnail</Th>
+                  <Th>SKU</Th>
+                  <Th>Product Name</Th>
+                  <Th>Stock</Th>
+                  <Th>Category</Th>
+                  <Th>Price</Th>
                   <Th>Action</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {categories.length === 0 && (
+                {products.length === 0 && (
                   <Tr>
+                    <Td>
+                      <Skeleton isLoaded={loading}>Loading...</Skeleton>
+                    </Td>
+                    <Td>
+                      <Skeleton isLoaded={loading}>Loading...</Skeleton>
+                    </Td>
+                    <Td>
+                      <Skeleton isLoaded={loading}>Loading...</Skeleton>
+                    </Td>
+                    <Td>
+                      <Skeleton isLoaded={loading}>Loading...</Skeleton>
+                    </Td>
                     <Td>
                       <Skeleton isLoaded={loading}>Loading...</Skeleton>
                     </Td>
@@ -48,10 +65,17 @@ const CategoriesComponent = () => {
                     </Td>
                   </Tr>
                 )}
-                {categories.map((category, index) => (
-                  <Tr key={category.id}>
-                    <Td>{(currentPage - 1) * 5 + (index + 1)}</Td>
-                    <Td>{category.name}</Td>
+                {products.map((product, index) => (
+                  <Tr key={product.id}>
+                    <Td>{(currentPage - 1) * 10 + (index + 1)}</Td>
+                    <Td>
+                      <Image src={product.thumbnail} h={50}></Image>
+                    </Td>
+                    <Td>{product.sku}</Td>
+                    <Td>{product.title}</Td>
+                    <Td>{product.stock}</Td>
+                    <Td>{product.category}</Td>
+                    <Td>{product.price}</Td>
                     <Td></Td>
                   </Tr>
                 ))}
