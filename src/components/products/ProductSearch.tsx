@@ -6,8 +6,8 @@ import {
   FormLabel,
   Input,
   InputGroup,
-  InputRightAddon,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import apiClient from "../../services/axios";
@@ -18,7 +18,10 @@ const ProductSearch = () => {
   const [productRate, setProductRate] = useState("");
   const [productStock, setproductStock] = useState("");
   const [productCat, setproductCat] = useState("");
+  const [productQuantity, setProductQuantity] = useState<number>(1);
+  const [productId, setProductId] = useState<number | string>("");
   const { increaseQuantity } = useShoppingCart();
+  const toast = useToast();
 
   const getProduct = async (query: string) => {
     try {
@@ -31,8 +34,8 @@ const ProductSearch = () => {
       setProductRate(productResponse.price);
       setproductStock(productResponse.stock);
       setproductCat(productResponse.category);
-      increaseQuantity(productResponse.id);
-
+      setProductId(productResponse.id);
+      increaseQuantity(productResponse.id, 1);
     } catch (error) {
       console.error("Error fetching product:", error);
       setproductName("");
@@ -47,6 +50,23 @@ const ProductSearch = () => {
     const query = e.currentTarget.value;
     if (query.length > 2) {
       getProduct(query);
+    }
+  };
+
+  const handleQuantity = (e: React.FormEvent<HTMLInputElement>) => {
+    const quantity = parseInt(e.currentTarget.value, 10);
+    if (quantity <= Number(productStock)) {
+      setProductQuantity(quantity);
+      increaseQuantity(Number(productId), quantity);
+    } else {
+      const description = `Only ${productStock} available stock`;
+      toast({
+        title: "Quantity exceeds available stock",
+        description: description,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
     }
   };
 
@@ -95,8 +115,12 @@ const ProductSearch = () => {
               <FormControl mb={4}>
                 <FormLabel>Quantity</FormLabel>
                 <InputGroup>
-                  <Input type="number" bg="white" placeholder="1" />
-                  <InputRightAddon>Pcs</InputRightAddon>
+                  <Input
+                    type="number"
+                    bg="white"
+                    value={productQuantity}
+                    onInput={handleQuantity}
+                  />
                 </InputGroup>
               </FormControl>
 

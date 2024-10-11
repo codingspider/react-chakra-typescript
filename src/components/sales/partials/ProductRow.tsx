@@ -20,23 +20,27 @@ function ProductRow() {
     <Box p={4}>
       {/* Table container */}
       <Box overflowX="auto">
-        <Table variant="striped" colorScheme="teal" id="productRow">
-          <Thead>
-            <Tr>
-              <Th>Product Information</Th>
-              <Th>Quantity</Th>
-              <Th>Unit</Th>
-              <Th>Rate</Th>
-              <Th>Total</Th>
-              <Th>Action</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {cartItems.map((item) => (
-              <CartItem key={item.id} {...item} />
-            ))}
-          </Tbody>
-        </Table>
+        {cartItems.length > 1 ? (
+          <Table variant="striped" colorScheme="teal" id="productRow">
+            <Thead>
+              <Tr>
+                <Th>Product Information</Th>
+                <Th>Quantity</Th>
+                <Th>Unit</Th>
+                <Th>Rate</Th>
+                <Th>Total</Th>
+                <Th>Action</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {cartItems.map((item, index) => (
+                <CartItem key={index} {...item} />
+              ))}
+            </Tbody>
+          </Table>
+        ) : (
+          <div>One or no items in the cart</div>
+        )}
       </Box>
 
       {/* Notes and Total Section */}

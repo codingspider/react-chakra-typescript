@@ -9,7 +9,7 @@ type CartItem = {
 
 type ShoppingCartContext = {
   getItemQuantity: (id: number) => number;
-  increaseQuantity: (id: number) => void;
+  increaseQuantity: (id: number, quantity: number) => void;
   decreaseQuantity: (id: number) => void;
   removeFromCart: (id: number) => void;
   cartQuantity: number;
@@ -36,16 +36,18 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     return cartItems.find((item) => item.id === id)?.quantity || 0;
   }
 
-  function increaseQuantity(id: number) {
+  function increaseQuantity(id: number, quantity: number) {
     setCartItems((currItems) => {
-      if (currItems.find((item) => item.id === id) == null) {
-        return [...currItems, { id, quantity: 1 }];
+      const itemExists = currItems.find((item) => item.id === id);
+
+      if (!itemExists) {
+        return [...currItems, { id, quantity }];
       } else {
         return currItems.map((item) => {
           if (item.id === id) {
-            return { ...item, quantity: item.quantity + 1 };
+            return { ...item, quantity };
           } else {
-            return item; // This return was missing
+            return item;
           }
         });
       }

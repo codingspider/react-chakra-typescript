@@ -25,10 +25,12 @@ const CartItem = ({ id, quantity }: CartItemProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiClient.get(
-          `https://dummyjson.com/products/${id}`
-        );
-        setItem(response.data);
+        if(id){
+          const response = await apiClient.get(
+            `https://dummyjson.com/products/${id}`
+          );
+          setItem(response.data);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
