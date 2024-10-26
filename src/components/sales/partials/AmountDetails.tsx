@@ -6,9 +6,36 @@ import {
   InputGroup,
   Button,
   Text,
+  Select,
 } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import apiClient from "../../../services/axios";
+import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
+
+interface StoreItemsProps {
+  id: number;
+  name: string;
+  price: number;
+}
 
 const AmountDetails = () => {
+  const { cartItems } = useShoppingCart();
+  const [storeItems, setStoreItems] = useState<StoreItemsProps[] | undefined>(
+    []
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await apiClient.get("https://dummyjson.com/products");
+        setStoreItems(response.data.products);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchData();
+  }, [setStoreItems]);
   return (
     <>
       <Box
@@ -21,12 +48,24 @@ const AmountDetails = () => {
       >
         <VStack align="stretch">
           <Text>Sub Total:</Text>
-          <Input placeholder="Sub Total" size="sm" bg="white" />
+          <Input
+            placeholder="Sub Total"
+            size="sm"
+            bg="white"
+            value={cartItems.reduce((total, cartItem) => {
+              const item = storeItems?.find((i) => i.id === cartItem.id);
+              return total + (item?.price || 0) * cartItem.quantity;
+            }, 0)}
+            isReadOnly
+          />
 
           <Text>VAT:</Text>
           <HStack spacing={4}>
             <InputGroup>
-              <Input placeholder="0" size="sm" bg="white" />
+              <Select placeholder="Select option">
+                <option value="fixed">Fixed</option>
+                <option value="percentage">Percentage</option>
+              </Select>
             </InputGroup>
             <InputGroup>
               <Input placeholder="0.00" size="sm" bg="white" />
@@ -36,7 +75,10 @@ const AmountDetails = () => {
           <Text>Discount:</Text>
           <HStack spacing={4}>
             <InputGroup>
-              <Input placeholder="0" size="sm" bg="white" />
+              <Select placeholder="Select option">
+                <option value="fixed">Fixed</option>
+                <option value="percentage">Percentage</option>
+              </Select>
             </InputGroup>
             <InputGroup>
               <Input placeholder="0.00" size="sm" bg="white" />

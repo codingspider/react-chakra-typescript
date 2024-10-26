@@ -1,7 +1,8 @@
-import { Tr, Td, Button } from "@chakra-ui/react";
+import { Tr, Td, Button, HStack } from "@chakra-ui/react";
 import { useShoppingCart } from "../../contexts/ShoppingCartContext";
 import { useEffect, useState } from "react";
 import apiClient from "../../services/axios";
+import FormatCurrency from "../../../src/utilities/FormatCurrency";
 
 type CartItemProps = {
   id: number;
@@ -14,7 +15,8 @@ type CartItemProps = {
 };
 
 const CartItem = ({ id, quantity }: CartItemProps) => {
-  const { removeFromCart } = useShoppingCart();
+  const { removeFromCart, increaseQuantity, decreaseQuantity } =
+    useShoppingCart();
 
   const [item, setItem] = useState<{
     id: number;
@@ -25,7 +27,7 @@ const CartItem = ({ id, quantity }: CartItemProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if(id){
+        if (id) {
           const response = await apiClient.get(
             `https://dummyjson.com/products/${id}`
           );
@@ -43,14 +45,34 @@ const CartItem = ({ id, quantity }: CartItemProps) => {
   return (
     <Tr>
       <Td>{item.title}</Td>
-      <Td>{quantity}</Td>
+      <Td>
+        <HStack>
+          <Button
+            colorScheme="teal"
+            size="xs"
+            onClick={() => decreaseQuantity(id)}
+          >
+            -
+          </Button>
+          <div>
+            <span className="fs-3">{quantity}</span>
+          </div>
+          <Button
+            colorScheme="teal"
+            size="xs"
+            onClick={() => increaseQuantity(id, quantity)}
+          >
+            +
+          </Button>
+        </HStack>
+      </Td>
       <Td>pcs</Td>
-      <Td>{item.price}</Td>
-      <Td>{item.price * quantity}</Td>
+      <Td> {FormatCurrency(item.price)}</Td>
+      <Td>{FormatCurrency(item.price * quantity)}</Td>
       <Td>
         <Button
           colorScheme="red"
-          size="sm"
+          size="xs"
           onClick={() => removeFromCart(item.id)}
         >
           x

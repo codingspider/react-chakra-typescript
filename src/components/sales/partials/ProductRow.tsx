@@ -12,16 +12,43 @@ import {
 
 import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
 import CartItem from "../../products/CartItem";
+import FormatCurrency from "../../../../src/utilities/FormatCurrency";
+import { useEffect, useState } from "react";
+import apiClient from "../../../services/axios";
+
+interface StoreItemsProps {
+  id: number;
+  name: string;
+  price: number;
+}
 
 function ProductRow() {
   const { cartItems } = useShoppingCart();
+  const [storeItems, setStoreItems] = useState<StoreItemsProps[] | undefined>(
+    []
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await apiClient.get("https://dummyjson.com/products");
+        setStoreItems(response.data.products);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchData();
+  }, [setStoreItems]);
+
+  
 
   return (
     <Box p={4}>
       {/* Table container */}
       <Box overflowX="auto">
         {cartItems.length > 1 ? (
-          <Table variant="striped" colorScheme="teal" id="productRow">
+          <Table variant="striped" colorScheme="teal" size="sm" id="productRow">
             <Thead>
               <Tr>
                 <Th>Product Information</Th>
@@ -68,7 +95,14 @@ function ProductRow() {
             Total
           </Text>
           <Text fontSize="4xl" color="red.500" fontWeight="bold">
-            6400.00{" "}
+            {storeItems &&
+              FormatCurrency(
+                cartItems.reduce((total, cartItem) => {
+                  const item = storeItems.find((i) => i.id === cartItem.id);
+                  return total + (item?.price || 0) * cartItem.quantity;
+                }, 0)
+              )}
+
             <Text as="span" fontSize="lg">
               BDT
             </Text>

@@ -20,7 +20,7 @@ const ProductSearch = () => {
   const [productCat, setproductCat] = useState("");
   const [productQuantity, setProductQuantity] = useState<number>(1);
   const [productId, setProductId] = useState<number | string>("");
-  const { increaseQuantity } = useShoppingCart();
+  const { addToCart } = useShoppingCart();
   const toast = useToast();
 
   const getProduct = async (query: string) => {
@@ -35,7 +35,7 @@ const ProductSearch = () => {
       setproductStock(productResponse.stock);
       setproductCat(productResponse.category);
       setProductId(productResponse.id);
-      increaseQuantity(productResponse.id, 1);
+      addToCart(productResponse.id, 1);
     } catch (error) {
       console.error("Error fetching product:", error);
       setproductName("");
@@ -57,7 +57,7 @@ const ProductSearch = () => {
     const quantity = parseInt(e.currentTarget.value, 10);
     if (quantity <= Number(productStock)) {
       setProductQuantity(quantity);
-      increaseQuantity(Number(productId), quantity);
+      addToCart(Number(productId), quantity);
     } else {
       const description = `Only ${productStock} available stock`;
       toast({
